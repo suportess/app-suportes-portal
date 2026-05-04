@@ -1,37 +1,28 @@
-# ── Stage 1: Oracle Instant Client 21 ────────────────────────────────────────
-# oraclelinux:8 está disponível no Docker Hub sem autenticação e já tem os
-# repositórios Oracle configurados (ol8_appstream inclui oracle-instantclient-release-el8)
+# ── Stage 1: Oracle Instant Client ───────────────────────────────────────────
+# Usa oraclelinux:8 para obter as libs do IC via dnf oficial.
+# O glob 'oracle-instantclient*-basic' funciona independente da versão minor.
 FROM oraclelinux:8 AS oracle-ic
 RUN dnf install -y oracle-instantclient-release-el8 && \
-    dnf install -y oracle-instantclient21-basic && \
+    dnf install -y 'oracle-instantclient*-basic' && \
     rm -rf /var/cache/dnf
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
+# godror/ODPI-C embute o código C internamente — Oracle IC NÃO é necessário
+# em tempo de compilação, apenas em runtime (carregado via dlopen).
 FROM golang:1.24-bullseye AS builder
-
-# Oracle Instant Client necessário para compilar godror/ODPI-C com CGO
-COPY --from=oracle-ic /usr/lib/oracle/21/client64 /usr/lib/oracle/21/client64
-RUN echo /usr/lib/oracle/21/client64/lib > /etc/ld.so.conf.d/oracle.conf && ldconfig
 
 WORKDIR /build
 
-# Cache de dependências antes de copiar o código-fonte
 COPY app/go.mod app/go.sum ./
 RUN go mod download
 
-# Copia o restante do código e compila
-# CGO_ENABLED=1 é obrigatório — godror (Oracle) usa ODPI-C (biblioteca C)
 COPY app/ .
-RUN CGO_ENABLED=1 GOOS=linux \
-    CGO_CFLAGS="-I/usr/lib/oracle/21/client64/include" \
-    CGO_LDFLAGS="-L/usr/lib/oracle/21/client64/lib" \
-    go build \
+RUN CGO_ENABLED=1 GOOS=linux go build \
     -ldflags="-w -s" \
     -o portal \
     ./cmd/main.go
 
 # ── Stage 3: imagem final ─────────────────────────────────────────────────────
-# Usa debian-slim (tem glibc) em vez de scratch — necessário para CGO + libaio
 FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -40,9 +31,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Oracle Instant Client runtime — libclntsh.so e dependências
-COPY --from=oracle-ic /usr/lib/oracle/21/client64/lib/ /usr/lib/oracle/21/client64/lib/
-RUN echo /usr/lib/oracle/21/client64/lib > /etc/ld.so.conf.d/oracle.conf && ldconfig
+# Oracle Instant Client runtime — localiza libclntsh.so dinamicamente
+COPY --from=oracle-ic /usr/lib/oracle /usr/lib/oracle
+RUN find /usr/lib/oracle -maxdepth 4 -name "libclntsh.so" -type f 2>/dev/null \
+        | head -1 | xargs -r dirname \
+        | xargs -r sh -c 'echo "$1" > /etc/ld.so.conf.d/oracle.conf' -- && \
+    ldconfig
 
 COPY --from=builder /build/portal /portal
 
