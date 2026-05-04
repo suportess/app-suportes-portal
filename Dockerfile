@@ -31,12 +31,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Oracle Instant Client runtime — localiza libclntsh.so dinamicamente
-COPY --from=oracle-ic /usr/lib/oracle /usr/lib/oracle
-RUN find /usr/lib/oracle -maxdepth 4 -name "libclntsh.so" -type f 2>/dev/null \
-        | head -1 | xargs -r dirname \
-        | xargs -r sh -c 'echo "$1" > /etc/ld.so.conf.d/oracle.conf' -- && \
-    ldconfig
+# Oracle Instant Client runtime — libclntsh.so e dependências
+COPY --from=oracle-ic /usr/lib/oracle/21/client64/lib/ /usr/lib/oracle/21/client64/lib/
+RUN echo /usr/lib/oracle/21/client64/lib > /etc/ld.so.conf.d/oracle.conf && ldconfig
 
 COPY --from=builder /build/portal /portal
 
