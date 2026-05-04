@@ -1,5 +1,5 @@
 # ── Stage 1: build ────────────────────────────────────────────────────────────
-FROM golang:1.24 AS builder
+FROM golang:1.24-bullseye AS builder
 
 WORKDIR /build
 
@@ -17,7 +17,7 @@ RUN CGO_ENABLED=1 GOOS=linux go build \
 
 # ── Stage 2: imagem final ─────────────────────────────────────────────────────
 # Usa debian-slim (tem glibc) em vez de scratch — necessário para CGO + libaio
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ca-certificates \
