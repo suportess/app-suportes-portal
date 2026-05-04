@@ -1,12 +1,16 @@
 # ── Stage 1: Oracle Instant Client 21 ────────────────────────────────────────
-FROM gvenzl/oracle-instant-client:21-slim AS oracle-ic
+# oraclelinux:8 está disponível no Docker Hub sem autenticação e já tem os
+# repositórios Oracle configurados (ol8_appstream inclui oracle-instantclient-release-el8)
+FROM oraclelinux:8 AS oracle-ic
+RUN dnf install -y oracle-instantclient-release-el8 && \
+    dnf install -y oracle-instantclient21.16-basic && \
+    rm -rf /var/cache/dnf
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
 FROM golang:1.24-bullseye AS builder
 
 # Oracle Instant Client necessário para compilar godror/ODPI-C com CGO
-COPY --from=oracle-ic /usr/lib/oracle /usr/lib/oracle
-COPY --from=oracle-ic /usr/share/oracle /usr/share/oracle
+COPY --from=oracle-ic /usr/lib/oracle/21/client64 /usr/lib/oracle/21/client64
 RUN echo /usr/lib/oracle/21/client64/lib > /etc/ld.so.conf.d/oracle.conf && ldconfig
 
 WORKDIR /build
@@ -36,7 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         wget \
     && rm -rf /var/lib/apt/lists/*
 
-# Oracle Instant Client runtime (libclntsh.so e dependências)
+# Oracle Instant Client runtime — libclntsh.so e dependências
 COPY --from=oracle-ic /usr/lib/oracle/21/client64/lib/ /usr/lib/oracle/21/client64/lib/
 RUN echo /usr/lib/oracle/21/client64/lib > /etc/ld.so.conf.d/oracle.conf && ldconfig
 

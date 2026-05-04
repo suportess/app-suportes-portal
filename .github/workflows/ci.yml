@@ -14,7 +14,7 @@ jobs:
       app_name: app-suportes-portal
       dockerfile_path: Dockerfile
       context: .
-      platforms: linux/amd64,linux/arm64
+      platforms: linux/amd64
     secrets:
       DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
