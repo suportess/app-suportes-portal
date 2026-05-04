@@ -16,7 +16,7 @@
 #
 # Variáveis opcionais em .env:
 #   SERVER_PORT       → porta interna do portal (padrão: 8080)
-#   STATUS            → UP | DOWN | MAINTENANCE (padrão: UP)
+#   STATUS            → UP | DOWN | MAINTENANCE (padrão: UP).
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:
