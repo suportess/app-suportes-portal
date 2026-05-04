@@ -1,7 +1,5 @@
 # ── Stage 1: build ────────────────────────────────────────────────────────────
-FROM golang:1.24-alpine AS builder
-
-RUN apk --no-cache add ca-certificates tzdata
+FROM golang:1.24 AS builder
 
 WORKDIR /build
 
@@ -10,17 +8,22 @@ COPY app/go.mod app/go.sum ./
 RUN go mod download
 
 # Copia o restante do código e compila
+# CGO_ENABLED=1 é obrigatório — godror (Oracle) usa ODPI-C (biblioteca C)
 COPY app/ .
-RUN CGO_ENABLED=0 GOOS=linux go build \
+RUN CGO_ENABLED=1 GOOS=linux go build \
     -ldflags="-w -s" \
     -o portal \
     ./cmd/main.go
 
-# ── Stage 2: imagem final mínima ──────────────────────────────────────────────
-FROM scratch
+# ── Stage 2: imagem final ─────────────────────────────────────────────────────
+# Usa debian-slim (tem glibc) em vez de scratch — necessário para CGO + libaio
+FROM debian:bookworm-slim
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        libaio1 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /build/portal /portal
 
 EXPOSE 8080
