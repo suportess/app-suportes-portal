@@ -9,7 +9,7 @@
       "program": "${workspaceFolder}/cmd/main.go",
       "env": {
         "SERVER_PORT": "8088",
-        "GATEWAY_API_KEY": "uuuuuuuuuuu",
+        "GATEWAY_API_KEY": "1D8FF478412AD86841CF98FF9914E5B111EB004BA600A1AA99496037FFA08BBA",
         "JAEGER_ENABLED": "false",
         "DATABASE": "portal.db",
         "DATABASE_PATH": "db",
