@@ -1,0 +1,50 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Portal — on-premises
+#
+# Setup:
+#   cp .env.example .env   # preencha todas as variáveis
+#   chmod 600 .env
+#   docker compose up -d
+#
+# Variáveis obrigatórias em .env:
+#   DOCKER_USERNAME   → usuário Docker Hub (ex: suportess)
+#   IMAGE_TAG         → tag da imagem (ex: latest)
+#   GATEWAY_API_KEY   → chave Bearer para autenticar chamadas ao portal
+#   NGROK_AUTHTOKEN   → token de autenticação da conta ngrok
+#   NGROK_DOMAIN      → domínio reservado gerado pelo suportes
+#                        (ex: abc123def456.ngrok-free.app)
+#
+# Variáveis opcionais em .env:
+#   SERVER_PORT       → porta interna do portal (padrão: 8080)
+#   STATUS            → UP | DOWN | MAINTENANCE (padrão: UP)
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  portal:
+    image: ${DOCKER_USERNAME:-suportess}/app-suportes-portal:${IMAGE_TAG:-latest}
+    container_name: portal
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - portal_data:/app/db
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:${SERVER_PORT:-8080}/status || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: portal-ngrok
+    restart: unless-stopped
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    command: http --domain=${NGROK_DOMAIN} portal:${SERVER_PORT:-8080}
+    depends_on:
+      portal:
+        condition: service_healthy
+
+volumes:
+  portal_data:

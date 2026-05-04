@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Push imagem Docker
+    uses: suportess/suportes-workflow/.github/workflows/docker-build.yml@main
+    with:
+      app_name: app-suportes-portal
+      dockerfile_path: Dockerfile
+      context: .
+      platforms: linux/amd64,linux/arm64
+    secrets:
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

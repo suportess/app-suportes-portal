@@ -1,0 +1,12 @@
+# Configurações locais — nunca commitar
+.env
+
+# Banco de dados local
+db/
+*.db
+
+# Binário de debug do VS Code / Delve
+app/__debug_bin*
+
+# Artefatos de build
+app/portal

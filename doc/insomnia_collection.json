@@ -1,0 +1,912 @@
+{
+    "_type":  "export",
+    "__export_format":  4,
+    "__export_date":  "2025-01-01T00:00:00.000Z",
+    "__export_source":  "insomnia.desktop.app:v9",
+    "resources":  [
+                      {
+                          "_id":  "wrk_agente",
+                          "_type":  "workspace",
+                          "name":  "Agente API",
+                          "description":  "ColeÃƒÂ§ÃƒÂ£o completa da API do Agente - gateway universal para execuÃƒÂ§ÃƒÂ£o de comandos em bancos de dados e APIs REST"
+                      },
+                      {
+                          "_id":  "env_agente_local",
+                          "_type":  "environment",
+                          "parentId":  "wrk_agente",
+                          "name":  "Local",
+                          "data":  {
+                                       "base_url":  "http://localhost:8080",
+                                       "api_key":  "agente-default-api-key-2025"
+                                   }
+                      },
+                      {
+                          "_id":  "fld_databases",
+                          "_type":  "request_group",
+                          "parentId":  "wrk_agente",
+                          "name":  "Ã°Å¸â€œÂ¦ Databases",
+                          "description":  "Gerenciamento de conexÃƒÂµes com bancos de dados externos"
+                      },
+                      {
+                          "_id":  "req_db_list",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Listar databases",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/databases",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_db_get_by_key",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Buscar database por key",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/databases?key=meu-banco",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_db_get_by_id",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Buscar database por ID",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/databases/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_db_create_mysql",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Criar database - MySQL",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/databases",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"mysql-prod\",\n  \"driver\": \"mysql\",\n  \"host\": \"localhost\",\n  \"port\": 3306,\n  \"dbName\": \"minha_base\",\n  \"user\": \"root\",\n  \"password\": \"senha123\",\n  \"pool\": {\n    \"maxOpenConns\": 10,\n    \"maxIdleConns\": 5,\n    \"connMaxLifetimeSec\": 90,\n    \"connMaxIdleTimeSec\": 30\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_db_create_postgres",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Criar database - PostgreSQL",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/databases",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"postgres-prod\",\n  \"driver\": \"postgres\",\n  \"host\": \"localhost\",\n  \"port\": 5432,\n  \"dbName\": \"minha_base\",\n  \"user\": \"postgres\",\n  \"password\": \"senha123\",\n  \"pool\": {\n    \"maxOpenConns\": 10,\n    \"maxIdleConns\": 5,\n    \"connMaxLifetimeSec\": 90,\n    \"connMaxIdleTimeSec\": 30\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_db_create_oracle",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Criar database - Oracle",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/databases",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"oracle-prod\",\n  \"driver\": \"oracle\",\n  \"host\": \"oracle-host\",\n  \"port\": 1521,\n  \"dbName\": \"ORCL\",\n  \"serviceName\": \"\",\n  \"sid\": \"\",\n  \"connectString\": \"\",\n  \"user\": \"system\",\n  \"password\": \"senha123\",\n  \"pool\": {\n    \"maxOpenConns\": 5,\n    \"maxIdleConns\": 2,\n    \"connMaxLifetimeSec\": 90,\n    \"connMaxIdleTimeSec\": 30\n  }\n}\n\n// ORACLE - Prioridade do connectString gerado:\n// 1. connectString  Ã¢â€ â€™ usado direto (ex: \"(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=host)(PORT=1521))(CONNECT_DATA=(SID=ORCL)))\")\n// 2. sid            Ã¢â€ â€™ host:port:SID\n// 3. serviceName    Ã¢â€ â€™ host:port/serviceName\n// 4. dbName         Ã¢â€ â€™ host:port/dbName  (padrÃƒÂ£o, service name)"
+                                   }
+                      },
+                      {
+                          "_id":  "req_db_create_sqlserver",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Criar database - SQL Server",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/databases",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"sqlserver-prod\",\n  \"driver\": \"sqlserver\",\n  \"host\": \"sqlserver-host\",\n  \"port\": 1433,\n  \"dbName\": \"minha_base\",\n  \"user\": \"sa\",\n  \"password\": \"senha123\",\n  \"pool\": {\n    \"maxOpenConns\": 10,\n    \"maxIdleConns\": 5,\n    \"connMaxLifetimeSec\": 90,\n    \"connMaxIdleTimeSec\": 30\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_db_delete_by_id",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Deletar database por ID",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/databases/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_db_delete_by_key",
+                          "_type":  "request",
+                          "parentId":  "fld_databases",
+                          "name":  "Deletar database por key",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/databases/0?key=mysql-prod",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "fld_commands",
+                          "_type":  "request_group",
+                          "parentId":  "wrk_agente",
+                          "name":  "Ã¢Å¡Â¡ Commands",
+                          "description":  "Gerenciamento de comandos SQL e HTTP"
+                      },
+                      {
+                          "_id":  "req_cmd_list",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Listar commands",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cmd_get_by_id",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Buscar command por ID",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/commands/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cmd_get_by_key",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Buscar commands por key (pattern)",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/commands?key=usuarios",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cmd_create_query",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - QUERY (SELECT)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"usuarios.buscar-por-id\",\n  \"description\": \"Busca um usuÃƒÂ¡rio pelo ID\",\n  \"type\": \"QUERY\",\n  \"databaseType\": \"postgres\",\n  \"sql\": \"SELECT id, nome, email, ativo FROM usuarios WHERE id = :id\",\n  \"parameters\": [\n    { \"name\": \"id\", \"type\": \"number\", \"required\": true }\n  ]\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_query_filter",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - QUERY com filtros dinÃƒÂ¢micos",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"usuarios.listar\",\n  \"description\": \"Lista usuÃƒÂ¡rios com filtros opcionais\",\n  \"type\": \"QUERY\",\n  \"databaseType\": \"mysql\",\n  \"sql\": \"SELECT id, nome, email FROM usuarios\",\n  \"parameters\": [\n    { \"name\": \"nome\", \"type\": \"string\", \"required\": false, \"operator\": \"LIKE\" },\n    { \"name\": \"ativo\", \"type\": \"boolean\", \"required\": false }\n  ],\n  \"order\": { \"columnName\": \"nome\", \"desc\": false },\n  \"pagination\": {\n    \"pageParam\": \"page\",\n    \"pageSizeParam\": \"pageSize\",\n    \"defaultPageSize\": 20,\n    \"maxPageSize\": 100\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_query_paged_oracle",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - QUERY paginado (Oracle)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"pedidos.listar\",\n  \"description\": \"Lista pedidos com paginaÃƒÂ§ÃƒÂ£o (Oracle 12c+)\",\n  \"type\": \"QUERY\",\n  \"databaseType\": \"oracle\",\n  \"sql\": \"SELECT id, numero, status, valor FROM pedidos\",\n  \"order\": { \"columnName\": \"numero\", \"desc\": true },\n  \"pagination\": {\n    \"pageParam\": \"page\",\n    \"pageSizeParam\": \"pageSize\",\n    \"defaultPageSize\": 10,\n    \"maxPageSize\": 50\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_query_paged_sqlserver",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - QUERY paginado (SQL Server)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"produtos.listar\",\n  \"description\": \"Lista produtos com paginaÃƒÂ§ÃƒÂ£o (SQL Server)\",\n  \"type\": \"QUERY\",\n  \"databaseType\": \"sqlserver\",\n  \"sql\": \"SELECT id, nome, preco, estoque FROM produtos\",\n  \"order\": { \"columnName\": \"nome\", \"desc\": false },\n  \"pagination\": {\n    \"pageParam\": \"pagina\",\n    \"pageSizeParam\": \"tamanho\",\n    \"defaultPageSize\": 15,\n    \"maxPageSize\": 200\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_insert",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - INSERT",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"usuarios.criar\",\n  \"description\": \"Insere um novo usuÃƒÂ¡rio\",\n  \"type\": \"INSERT\",\n  \"databaseType\": \"postgres\",\n  \"table\": \"usuarios\",\n  \"body\": {\n    \"fields\": [\n      { \"name\": \"nome\", \"type\": \"string\", \"required\": true, \"maximum\": 100 },\n      { \"name\": \"email\", \"type\": \"string\", \"required\": true, \"maximum\": 150 },\n      { \"name\": \"senha\", \"type\": \"string\", \"required\": true, \"minimum\": 8 },\n      { \"name\": \"ativo\", \"type\": \"boolean\", \"required\": false }\n    ]\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_update",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - UPDATE",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"usuarios.atualizar\",\n  \"description\": \"Atualiza dados de um usuÃƒÂ¡rio\",\n  \"type\": \"UPDATE\",\n  \"databaseType\": \"postgres\",\n  \"table\": \"usuarios\",\n  \"parameters\": [\n    { \"name\": \"id\", \"type\": \"number\", \"required\": true }\n  ]\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_delete",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - DELETE",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"usuarios.remover\",\n  \"description\": \"Remove um usuÃƒÂ¡rio pelo ID\",\n  \"type\": \"DELETE\",\n  \"databaseType\": \"postgres\",\n  \"table\": \"usuarios\",\n  \"parameters\": [\n    { \"name\": \"id\", \"type\": \"number\", \"required\": true }\n  ]\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_procedure",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - PROCEDURE (com OUT)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"relatorio.gerar\",\n  \"description\": \"Chama procedure de geraÃƒÂ§ÃƒÂ£o de relatÃƒÂ³rio\",\n  \"type\": \"PROCEDURE\",\n  \"databaseType\": \"oracle\",\n  \"sql\": \"BEGIN PKG_RELATORIO.GERAR(:p_data_inicio, :p_data_fim, :p_resultado); END;\",\n  \"parameters\": [\n    { \"name\": \"p_data_inicio\", \"type\": \"string\", \"required\": true },\n    { \"name\": \"p_data_fim\", \"type\": \"string\", \"required\": true },\n    { \"name\": \"p_resultado\", \"type\": \"out\" }\n  ]\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_post_http",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - POST (HTTP externo)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"notificacao.enviar\",\n  \"description\": \"Envia uma notificaÃƒÂ§ÃƒÂ£o via API externa\",\n  \"type\": \"POST\",\n  \"route\": \"https://api.externa.com/notificacoes\",\n  \"contentType\": \"application/json\",\n  \"body\": {\n    \"fields\": [\n      { \"name\": \"titulo\", \"type\": \"string\", \"required\": true, \"maximum\": 100 },\n      { \"name\": \"mensagem\", \"type\": \"string\", \"required\": true, \"maximum\": 500 },\n      { \"name\": \"destinatario\", \"type\": \"string\", \"required\": true }\n    ]\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_get_http",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - GET (HTTP externo com placeholder)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"cep.consultar\",\n  \"description\": \"Consulta endereÃƒÂ§o pelo CEP em API externa\",\n  \"type\": \"GET\",\n  \"route\": \"https://viacep.com.br/ws/{cep}/json/\",\n  \"contentType\": \"application/json\"\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_update",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Atualizar command por ID",
+                          "method":  "PUT",
+                          "url":  "{{ _.base_url }}/commands/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"description\": \"DescriÃƒÂ§ÃƒÂ£o atualizada\",\n  \"sql\": \"SELECT id, nome, email, perfil FROM usuarios WHERE id = :id\"\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_delete_by_id",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Deletar command por ID",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/commands/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cmd_delete_by_key",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Deletar commands por key (pattern)",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/commands/0?key=usuarios",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "fld_routes",
+                          "_type":  "request_group",
+                          "parentId":  "wrk_agente",
+                          "name":  "Ã°Å¸â€â‚¬ Routes",
+                          "description":  "Gerenciamento de rotas dinÃƒÂ¢micas"
+                      },
+                      {
+                          "_id":  "req_route_list",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Listar rotas",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/routes",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_route_get_by_id",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Buscar rota por ID",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/routes/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_route_filter_method",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Filtrar rotas por method",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/routes?method=GET",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_route_filter_path",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Filtrar rotas por path",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/routes?path=/api/v1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_route_create_query",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Criar rota - GET /api/v1/usuarios/{id}",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/routes",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"api.v1.usuarios.buscar\",\n  \"path\": \"/api/v1/usuarios/{id}\",\n  \"method\": \"GET\",\n  \"response\": {\n    \"status\": 200,\n    \"contentType\": \"application/json\"\n  },\n  \"service\": {\n    \"singleThread\": true,\n    \"singleResult\": true,\n    \"steps\": [\n      {\n        \"alias\": \"usuario\",\n        \"abortNoData\": false,\n        \"command\": {\n          \"type\": \"QUERY\",\n          \"database\": \"postgres-prod\",\n          \"name\": \"usuarios.buscar-por-id\",\n          \"returnResult\": true,\n          \"parameters\": [\n            { \"name\": \"id\", \"type\": \"string\", \"extract\": false }\n          ]\n        }\n      }\n    ]\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_route_create_insert",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Criar rota - POST /api/v1/usuarios (INSERT)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/routes",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"api.v1.usuarios.criar\",\n  \"path\": \"/api/v1/usuarios\",\n  \"method\": \"POST\",\n  \"response\": {\n    \"status\": 201,\n    \"contentType\": \"application/json\"\n  },\n  \"service\": {\n    \"singleThread\": true,\n    \"singleResult\": true,\n    \"steps\": [\n      {\n        \"alias\": \"novo_usuario\",\n        \"abortNoData\": false,\n        \"command\": {\n          \"type\": \"INSERT\",\n          \"database\": \"postgres-prod\",\n          \"name\": \"usuarios.criar\",\n          \"returnResult\": true,\n          \"parameters\": []\n        }\n      }\n    ]\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_route_create_multi_step",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Criar rota - multi-step (QUERY + POST HTTP)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/routes",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"key\": \"api.v1.pedidos.processar\",\n  \"path\": \"/api/v1/pedidos/{id}/processar\",\n  \"method\": \"POST\",\n  \"response\": {\n    \"status\": 200,\n    \"contentType\": \"application/json\"\n  },\n  \"service\": {\n    \"singleThread\": true,\n    \"singleResult\": false,\n    \"steps\": [\n      {\n        \"alias\": \"pedido\",\n        \"abortNoData\": true,\n        \"command\": {\n          \"type\": \"QUERY\",\n          \"database\": \"postgres-prod\",\n          \"name\": \"pedidos.buscar-por-id\",\n          \"returnResult\": true,\n          \"parameters\": [\n            { \"name\": \"id\", \"type\": \"string\", \"extract\": false }\n          ]\n        }\n      },\n      {\n        \"alias\": \"notificacao\",\n        \"abortNoData\": false,\n        \"command\": {\n          \"type\": \"POST\",\n          \"name\": \"notificacao.enviar\",\n          \"returnResult\": false,\n          \"parameters\": [\n            { \"name\": \"destinatario\", \"type\": \"string\", \"extract\": true, \"field\": \"email\" }\n          ]\n        }\n      }\n    ]\n  }\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_route_delete_by_id",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Remover rota por ID",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/routes/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_route_delete_by_key",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Remover rotas por key (pattern)",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/routes/0?key=api.v1.usuarios",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "fld_certificates",
+                          "_type":  "request_group",
+                          "parentId":  "wrk_agente",
+                          "name":  "Ã°Å¸â€Â Certificates",
+                          "description":  "Gerenciamento de certificados TLS/mTLS"
+                      },
+                      {
+                          "_id":  "req_cert_list",
+                          "_type":  "request",
+                          "parentId":  "fld_certificates",
+                          "name":  "Listar certificados",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/certificates",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cert_get_by_name",
+                          "_type":  "request",
+                          "parentId":  "fld_certificates",
+                          "name":  "Buscar certificado por name",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/certificates?name=meu-cert",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cert_create_pfx",
+                          "_type":  "request",
+                          "parentId":  "fld_certificates",
+                          "name":  "Criar certificado - PFX (mTLS)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/certificates",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"name\": \"cliente-externo-cert\",\n  \"description\": \"Certificado mTLS para API do cliente externo\",\n  \"certFile\": \"\u003cBASE64_DO_PFX_AQUI\u003e\",\n  \"password\": \"senha-do-pfx\",\n  \"caCertFile\": \"\u003cBASE64_DO_CA_PEM_OPCIONAL\u003e\",\n  \"expirationDate\": \"2026-12-31\"\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cert_update",
+                          "_type":  "request",
+                          "parentId":  "fld_certificates",
+                          "name":  "Atualizar certificado por ID",
+                          "method":  "PUT",
+                          "url":  "{{ _.base_url }}/certificates/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"description\": \"Certificado renovado 2026\",\n  \"certFile\": \"\u003cNOVO_BASE64_PFX\u003e\",\n  \"password\": \"nova-senha\",\n  \"active\": true,\n  \"expirationDate\": \"2027-12-31\"\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cert_delete",
+                          "_type":  "request",
+                          "parentId":  "fld_certificates",
+                          "name":  "Deletar certificado por ID",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/certificates/1",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "req_cert_delete_by_name",
+                          "_type":  "request",
+                          "parentId":  "fld_certificates",
+                          "name":  "Deletar certificado por name",
+                          "method":  "DELETE",
+                          "url":  "{{ _.base_url }}/certificates/0?name=cliente-externo-cert",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          }
+                                      ]
+                      },
+                      {
+                          "_id":  "fld_status",
+                          "_type":  "request_group",
+                          "parentId":  "wrk_agente",
+                          "name":  "Ã°Å¸â€œÅ  Status \u0026 Health",
+                          "description":  "Monitoramento e saÃƒÂºde da aplicaÃƒÂ§ÃƒÂ£o"
+                      },
+                      {
+                          "_id":  "req_status",
+                          "_type":  "request",
+                          "parentId":  "fld_status",
+                          "name":  "Status (databases + uptime)",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/status"
+                      },
+                      {
+                          "_id":  "req_health",
+                          "_type":  "request",
+                          "parentId":  "fld_status",
+                          "name":  "Health (memÃƒÂ³ria + goroutines)",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/health"
+                      },
+                      {
+                          "_id":  "fld_dynamic_routes",
+                          "_type":  "request_group",
+                          "parentId":  "wrk_agente",
+                          "name":  "Ã°Å¸Å¡â‚¬ Rotas DinÃƒÂ¢micas (exemplos)",
+                          "description":  "Chamadas ÃƒÂ s rotas registradas dinamicamente"
+                      },
+                      {
+                          "_id":  "req_dyn_get_usuario",
+                          "_type":  "request",
+                          "parentId":  "fld_dynamic_routes",
+                          "name":  "GET /api/v1/usuarios/{id}",
+                          "method":  "GET",
+                          "url":  "{{ _.base_url }}/api/v1/usuarios/42"
+                      },
+                      {
+                          "_id":  "req_dyn_post_usuario",
+                          "_type":  "request",
+                          "parentId":  "fld_dynamic_routes",
+                          "name":  "POST /api/v1/usuarios",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/api/v1/usuarios",
+                          "headers":  [
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\n  \"nome\": \"JoÃƒÂ£o Silva\",\n  \"email\": \"joao@exemplo.com\",\n  \"senha\": \"senha123\",\n  \"ativo\": true\n}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_dyn_post_pedido_processar",
+                          "_type":  "request",
+                          "parentId":  "fld_dynamic_routes",
+                          "name":  "POST /api/v1/pedidos/{id}/processar (multi-step)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/api/v1/pedidos/100/processar",
+                          "headers":  [
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_anonymous_devolucao",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - ANONYMOUS (PL/SQL devolucao consignada)",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\"key\":\"devolver-produto-consignado\",\"description\":\"Registra devolucao de produto consignado: DEV_FOR+ITDEV_FOR (saida) e nova ENT_PRO+ITENT_PRO+ITLOT_ENT (entrada de troca)\",\"type\":\"ANONYMOUS\",\"databaseType\":\"oracle\",\"sql\":\"DECLARE v_dt DATE; v_dt_validade_dev DATE; v_dt_validade_ent DATE; v_cd_tip_doc NUMBER; v_cd_mot_dev NUMBER; v_cd_estoque NUMBER; v_cd_fornecedor NUMBER; v_nr_documento DBAMV.ENT_PRO.NR_DOCUMENTO%TYPE; v_nr_serie_orig DBAMV.ENT_PRO.NR_SERIE%TYPE; v_nr_serie_new DBAMV.ENT_PRO.NR_SERIE%TYPE; v_suffix NUMBER; v_cnt NUMBER; v_cd_uni_pro_dev NUMBER; v_cd_custo_dev NUMBER; v_sn_lote_dev CHAR(1); v_cd_itent_pro NUMBER; v_cd_uni_pro_ent NUMBER; v_cd_custo_ent NUMBER; v_sn_lote_ent CHAR(1); v_sn_val_ent CHAR(1); v_vl_unitario NUMBER; v_cd_devolucao NUMBER; v_vl_total_dev NUMBER; v_cd_ent_pro_new NUMBER; v_cd_itent_new NUMBER; v_cd_itlot_new NUMBER; BEGIN v_dt := TO_DATE(:dt_devolucao, \u0027YYYY-MM-DD\u0027); IF :dt_validade_dev IS NOT NULL THEN v_dt_validade_dev := TO_DATE(:dt_validade_dev, \u0027YYYY-MM-DD\u0027); END IF; IF :dt_validade_ent IS NOT NULL THEN v_dt_validade_ent := TO_DATE(:dt_validade_ent, \u0027YYYY-MM-DD\u0027); END IF; DBAMV.PKG_MV2000.ATRIBUI_EMPRESA(:cd_multi_empresa); SELECT CD_TIP_DOC INTO v_cd_tip_doc FROM DBAMV.TIP_DOC WHERE TP_DOCUMENTO = \u0027E\u0027 AND TP_ENTRADA = \u0027N\u0027 AND SN_ATIVO = \u0027S\u0027 AND ROWNUM = 1; SELECT CD_MOT_DEV INTO v_cd_mot_dev FROM DBAMV.MOT_DEV WHERE ROWNUM = 1; SELECT CD_ESTOQUE, CD_FORNECEDOR, NR_DOCUMENTO, NR_SERIE INTO v_cd_estoque, v_cd_fornecedor, v_nr_documento, v_nr_serie_orig FROM DBAMV.ENT_PRO WHERE CD_ENT_PRO = :cd_ent_pro; v_suffix := 0; LOOP v_suffix := v_suffix + 1; v_nr_serie_new := NVL(v_nr_serie_orig, \u0027\u0027) || TO_CHAR(v_suffix); SELECT COUNT(*) INTO v_cnt FROM DBAMV.ENT_PRO WHERE NR_DOCUMENTO = v_nr_documento AND NR_SERIE = v_nr_serie_new; EXIT WHEN v_cnt = 0; EXIT WHEN v_suffix >= 9; END LOOP; SELECT SN_LOTE INTO v_sn_lote_dev FROM DBAMV.PRODUTO WHERE CD_PRODUTO = :cd_produto_dev; BEGIN SELECT CD_UNI_PRO INTO v_cd_uni_pro_dev FROM DBAMV.UNI_PRO WHERE CD_PRODUTO = :cd_produto_dev AND TP_RELATORIOS = \u0027R\u0027 AND ROWNUM = 1; EXCEPTION WHEN NO_DATA_FOUND THEN SELECT CD_UNI_PRO INTO v_cd_uni_pro_dev FROM DBAMV.UNI_PRO WHERE CD_PRODUTO = :cd_produto_dev AND ROWNUM = 1; END; SELECT CD_CUSTO_MEDIO_MENSAL INTO v_cd_custo_dev FROM (SELECT CD_CUSTO_MEDIO_MENSAL FROM DBAMV.CUSTO_MEDIO_MENSAL WHERE CD_PRODUTO = :cd_produto_dev ORDER BY DH_CUSTO_MEDIO DESC) WHERE ROWNUM = 1; SELECT CD_ITENT_PRO INTO v_cd_itent_pro FROM DBAMV.ITENT_PRO WHERE CD_ENT_PRO = :cd_ent_pro AND CD_PRODUTO = :cd_produto_dev AND CD_UNI_PRO = v_cd_uni_pro_dev AND ROWNUM = 1; SELECT SN_LOTE, SN_CONTROLE_VALIDADE INTO v_sn_lote_ent, v_sn_val_ent FROM DBAMV.PRODUTO WHERE CD_PRODUTO = :cd_produto_ent; BEGIN SELECT CD_UNI_PRO INTO v_cd_uni_pro_ent FROM DBAMV.UNI_PRO WHERE CD_PRODUTO = :cd_produto_ent AND TP_RELATORIOS = \u0027R\u0027 AND ROWNUM = 1; EXCEPTION WHEN NO_DATA_FOUND THEN SELECT CD_UNI_PRO INTO v_cd_uni_pro_ent FROM DBAMV.UNI_PRO WHERE CD_PRODUTO = :cd_produto_ent AND ROWNUM = 1; END; SELECT CD_CUSTO_MEDIO_MENSAL INTO v_cd_custo_ent FROM (SELECT CD_CUSTO_MEDIO_MENSAL FROM DBAMV.CUSTO_MEDIO_MENSAL WHERE CD_PRODUTO = :cd_produto_ent ORDER BY DH_CUSTO_MEDIO DESC) WHERE ROWNUM = 1; BEGIN SELECT VL_CUSTO_MEDIO INTO v_vl_unitario FROM (SELECT VL_CUSTO_MEDIO FROM DBAMV.CUSTO_MEDIO_MENSAL WHERE CD_PRODUTO = :cd_produto_ent ORDER BY DH_CUSTO_MEDIO DESC) WHERE ROWNUM = 1; IF v_vl_unitario IS NULL OR v_vl_unitario = 0 THEN v_vl_unitario := 1; END IF; EXCEPTION WHEN NO_DATA_FOUND THEN v_vl_unitario := 1; END; SELECT DBAMV.SEQ_DEV_FOR.NEXTVAL INTO v_cd_devolucao FROM DUAL; INSERT INTO DBAMV.DEV_FOR (CD_DEVOLUCAO,CD_ENT_PRO,CD_MOT_DEV,DT_DEVOLUCAO,HR_DEVOLUCAO,DT_EMISSAO,TP_DEVOLUCAO,SN_CONSOLIDADA,CD_TIP_DOC,NR_DOCUMENTO,NR_SERIE) VALUES (v_cd_devolucao,:cd_ent_pro,v_cd_mot_dev,v_dt,v_dt,v_dt,\u0027N\u0027,\u0027S\u0027,v_cd_tip_doc,v_nr_documento,v_nr_serie_new); INSERT INTO DBAMV.ITDEV_FOR (CD_ITDEV_FOR,CD_PRODUTO,CD_DEVOLUCAO,CD_UNI_PRO,QT_DEVOLVIDA,CD_CUSTO_MEDIO,CD_ITENT_PRO,CD_LOTE,DT_VALIDADE,DT_GRAVACAO) VALUES (DBAMV.SEQ_ITDEV_FOR.NEXTVAL,:cd_produto_dev,v_cd_devolucao,v_cd_uni_pro_dev,:qt_devolvida,v_cd_custo_dev,v_cd_itent_pro,:cd_lote_dev,v_dt_validade_dev,SYSDATE); SELECT SUM(i.QT_DEVOLVIDA * ep.VL_UNITARIO) INTO v_vl_total_dev FROM DBAMV.ITDEV_FOR i JOIN DBAMV.ITENT_PRO ep ON ep.CD_ITENT_PRO = i.CD_ITENT_PRO WHERE i.CD_DEVOLUCAO = v_cd_devolucao; UPDATE DBAMV.DEV_FOR SET VL_TOTAL = v_vl_total_dev WHERE CD_DEVOLUCAO = v_cd_devolucao; SELECT DBAMV.SEQ_ENT_PRO.NEXTVAL INTO v_cd_ent_pro_new FROM DUAL; INSERT INTO DBAMV.ENT_PRO (CD_ENT_PRO,CD_ESTOQUE,DT_ENTRADA,HR_ENTRADA,TP_FRETE,SN_ATUALIZA_PRECO,TP_ENTREGA,TP_DOCUMENTO_ENTRADA,CD_TIP_DOC,SN_INCLUSAO_NOTA,SN_CONSOLIDADA,SN_CONSIGNADO,SN_CONTABILIZA,SN_FECHADO,SN_AUTORIZADO,SN_IMPORTADA_FNFI,CD_FORNECEDOR,NR_DOCUMENTO,NR_SERIE,VL_TOTAL,CD_USUARIO) VALUES (v_cd_ent_pro_new,v_cd_estoque,v_dt,v_dt,\u0027C\u0027,\u0027S\u0027,\u0027T\u0027,\u0027N\u0027,v_cd_tip_doc,\u0027S\u0027,\u0027N\u0027,\u0027N\u0027,\u0027S\u0027,\u0027N\u0027,\u0027S\u0027,\u0027N\u0027,v_cd_fornecedor,v_nr_documento,v_nr_serie_new,1,\u0027SEED\u0027); SELECT DBAMV.SEQ_ITENT_PRO.NEXTVAL INTO v_cd_itent_new FROM DUAL; INSERT INTO DBAMV.ITENT_PRO (CD_ITENT_PRO,CD_ENT_PRO,CD_PRODUTO,CD_UNI_PRO,QT_ENTRADA,QT_DEVOLVIDA,VL_UNITARIO,VL_CUSTO_REAL,VL_TOTAL,CD_CUSTO_MEDIO,DT_GRAVACAO) VALUES (v_cd_itent_new,v_cd_ent_pro_new,:cd_produto_ent,v_cd_uni_pro_ent,:qt_entrada,0,v_vl_unitario,v_vl_unitario,:qt_entrada * v_vl_unitario,v_cd_custo_ent,SYSDATE); IF v_sn_lote_ent = \u0027S\u0027 THEN SELECT DBAMV.SEQ_T_ITLOT_ENT.NEXTVAL INTO v_cd_itlot_new FROM DUAL; INSERT INTO DBAMV.ITLOT_ENT (CD_ITLOT_ENT,CD_ITENT_PRO,QT_ENT_PRO,CD_UNI_PRO,CD_LOTE,DT_VALIDADE) VALUES (v_cd_itlot_new,v_cd_itent_new,:qt_entrada,v_cd_uni_pro_ent,:cd_lote_ent,CASE WHEN v_sn_val_ent = \u0027S\u0027 THEN v_dt_validade_ent ELSE NULL END); END IF; UPDATE DBAMV.ENT_PRO SET VL_TOTAL = (SELECT SUM(VL_TOTAL) FROM DBAMV.ITENT_PRO WHERE CD_ENT_PRO = v_cd_ent_pro_new) WHERE CD_ENT_PRO = v_cd_ent_pro_new; COMMIT; END;\",\"parameters\":[{\"name\":\"cd_multi_empresa\",\"type\":\"number\",\"required\":true},{\"name\":\"cd_ent_pro\",\"type\":\"number\",\"required\":true},{\"name\":\"cd_produto_dev\",\"type\":\"number\",\"required\":true},{\"name\":\"cd_lote_dev\",\"type\":\"string\",\"required\":false},{\"name\":\"dt_validade_dev\",\"type\":\"string\",\"required\":false},{\"name\":\"qt_devolvida\",\"type\":\"number\",\"required\":true},{\"name\":\"cd_produto_ent\",\"type\":\"number\",\"required\":true},{\"name\":\"cd_lote_ent\",\"type\":\"string\",\"required\":false},{\"name\":\"dt_validade_ent\",\"type\":\"string\",\"required\":false},{\"name\":\"qt_entrada\",\"type\":\"number\",\"required\":true},{\"name\":\"dt_devolucao\",\"type\":\"string\",\"required\":true}]}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_cmd_create_query_produto_detalhe",
+                          "_type":  "request",
+                          "parentId":  "fld_commands",
+                          "name":  "Criar command - QUERY produto-detalhe",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/commands",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\"key\":\"produto-detalhe\",\"description\":\"Busca detalhes de um produto: flags de lote, validade e consignado\",\"type\":\"QUERY\",\"databaseType\":\"oracle\",\"sql\":\"SELECT SN_LOTE, SN_CONTROLE_VALIDADE, SN_CONSIGNADO, CD_PRODUTO, DS_PRODUTO FROM DBAMV.PRODUTO WHERE CD_PRODUTO = :cd_produto\",\"parameters\":[{\"name\":\"cd_produto\",\"type\":\"number\",\"required\":true}]}"
+                                   }
+                      },
+                      {
+                          "_id":  "req_route_create_get_produto_detalhe",
+                          "_type":  "request",
+                          "parentId":  "fld_routes",
+                          "name":  "Criar rota - GET /mv/api/produtos/{cd_produto}",
+                          "method":  "POST",
+                          "url":  "{{ _.base_url }}/routes",
+                          "headers":  [
+                                          {
+                                              "name":  "Authorization",
+                                              "value":  "Bearer {{ _.api_key }}"
+                                          },
+                                          {
+                                              "name":  "Content-Type",
+                                              "value":  "application/json"
+                                          }
+                                      ],
+                          "body":  {
+                                       "mimeType":  "application/json",
+                                       "text":  "{\"chave\":\"GET-mv-produto-detalhe\",\"caminho\":\"/mv/api/produtos/{cd_produto}\",\"metodo\":\"GET\",\"resposta\":{\"status\":200},\"servico\":{\"threadUnica\":true,\"resultadoUnico\":true,\"passos\":[{\"alias\":\"produto\",\"abortarSemDados\":false,\"comando\":{\"tipo\":\"QUERY\",\"database\":\"oracle-prod\",\"nome\":\"produto-detalhe\",\"retornarResultado\":true,\"parametros\":[{\"nome\":\"cd_produto\",\"tipo\":\"path\",\"extrair\":false}]}}]}}"
+                                   }
+                      }
+                  ]
+}
