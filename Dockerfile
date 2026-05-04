@@ -3,7 +3,7 @@
 # repositórios Oracle configurados (ol8_appstream inclui oracle-instantclient-release-el8)
 FROM oraclelinux:8 AS oracle-ic
 RUN dnf install -y oracle-instantclient-release-el8 && \
-    dnf install -y oracle-instantclient21.16-basic && \
+    dnf install -y oracle-instantclient21-basic && \
     rm -rf /var/cache/dnf
 
 # ── Stage 2: build ────────────────────────────────────────────────────────────
