@@ -13,23 +13,27 @@
 #   NGROK_AUTHTOKEN   → token de autenticação da conta ngrok
 #   NGROK_DOMAIN      → domínio reservado gerado pelo suportes
 #                        (ex: abc123def456.ngrok-free.app)
+#   PORTAL_API_KEY    → mesma chave que GATEWAY_API_KEY (usada pelo portal-scripts)
 #
 # Variáveis opcionais em .env:
 #   SERVER_PORT       → porta interna do portal (padrão: 8080)
-#   STATUS            → UP | DOWN | MAINTENANCE (padrão: UP).
+#   STATUS            → UP | DOWN | MAINTENANCE (padrão: UP)
+#
+# Para rodar as migrations (uma única vez após subir):
+#   docker compose run --rm portal-scripts
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:
 
   portal:
-    image: ${DOCKER_USERNAME:-suportess}/app-suportes-portal:${IMAGE_TAG:-latest}
+    image: jessebezerra/app-suportes-portal:latest
     container_name: portal
     restart: unless-stopped
     env_file: .env
     volumes:
       - portal_data:/app/db
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${SERVER_PORT:-8080}/status || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:${SERVER_PORT:-8080}/status | grep -q '\"UP\"' || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -46,5 +50,21 @@ services:
       portal:
         condition: service_healthy
 
+  portal-scripts:
+    image: jessebezerra/app-suportes-portal-scripts:latest
+    container_name: portal-scripts
+    restart: "no"
+    env_file: .env
+    environment:
+      PORTAL_URL: http://portal:${SERVER_PORT:-8080}
+      PORTAL_API_KEY: ${GATEWAY_API_KEY}
+      PORTAL_HISTORY_FILE: /app/history/portal_scripts_history.json
+    volumes:
+      - portal_scripts_history:/app/history
+    depends_on:
+      portal:
+        condition: service_healthy
+
 volumes:
   portal_data:
+  portal_scripts_history:
