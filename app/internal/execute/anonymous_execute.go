@@ -14,6 +14,7 @@ import (
 // AnonymousExecute executa um bloco anônimo PL/SQL (DECLARE ... BEGIN ... END).
 // Parâmetros IN são vinculados via named binds (:nome).
 // Parâmetros com tipo "out" são tratados como OUT binds e retornados no corpo da resposta.
+// O buffer de saída é de 32767 bytes (máximo VARCHAR2 no PL/SQL).
 // Se não houver parâmetros OUT, retorna {"status": "concluido"}.
 type AnonymousExecute struct{}
 
@@ -47,7 +48,8 @@ func (e *AnonymousExecute) Run(ctx *ExecContext) (interface{}, apierr.Detail) {
 
 	for _, p := range cmd.Parameters {
 		if p.Type == enum.ParamTypeOut {
-			buf := strings.Repeat(" ", 4000)
+			// 32767 = limite máximo de VARCHAR2 no PL/SQL
+			buf := strings.Repeat(" ", 32767)
 			outParams[p.Name] = &buf
 			args = append(args, sql.Named(p.Name, sql.Out{Dest: &buf, In: false}))
 		} else {
@@ -73,4 +75,3 @@ func (e *AnonymousExecute) Run(ctx *ExecContext) (interface{}, apierr.Detail) {
 	}
 	return result, nil
 }
-

@@ -131,8 +131,13 @@ func (c *Command) ProcessParameters() {
 }
 
 func (c *Command) syncParametersFromSQL() {
+	// Strip single-quoted string literals before scanning to avoid false bind-variable
+	// matches inside SQL string content, e.g. '"ERRO":true' containing ':true'.
+	reLiteral := regexp.MustCompile(`'[^']*'`)
+	stripped := reLiteral.ReplaceAllString(c.SQL, "''")
+
 	re := regexp.MustCompile(regexp.QuoteMeta(c.ParamSymbol()) + `(\w+)`)
-	matches := re.FindAllStringSubmatch(c.SQL, -1)
+	matches := re.FindAllStringSubmatch(stripped, -1)
 	for _, m := range matches {
 		name := m[1]
 		if !c.hasParam(name) {
